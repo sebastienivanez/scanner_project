@@ -1,0 +1,7 @@
+max3232
+rs232 null p2=RxD-p3=TxD, p3=Txd-p2=RxD
+rs232 straight p2=RxD-p2=RxD, p3=Txd-p3=TxD
+serial pi plus
+raspberry pi
+RS232 DB9 connector of chipsee lcd is p2=TxD P3=RxD
+

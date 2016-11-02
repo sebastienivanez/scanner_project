@@ -1,0 +1,27 @@
+* 18_10 :
+	- Meeting with stefaan, we talked about the specs of the project
+	- Retrieved the beaglebone black + chipsee
+	- First try to boot the bbl on the chipsee screen with the image already installed on the eeprom but failed :
+		> There are no preinstalled image on the bbl ?
+		> The chipsee is not working ?
+		> We have to install special drivers on the bbl to communicate with the chipsee ? 
+* 24_10 :
+	- We tested the image on the bbl with a serial debugger UART :
+		> Bbl + UART connector + Power supply (see photo + pinout of bbl)
+		> To see if the UART is well connected use dmesg (ex : ttyUSB0)
+		> We used minicom (sudo apt-get install minicom) with command sudo minicom -s (Serial port setup -> A - Serial Device : /dev/ttyUSB0 F - Hardware Flow Control : No)
+		> Works we can boot on the bbl
+* 26_10 :
+	- We boot the bbl with an image on SD card :
+		> We installed an image (bone-debian-8.4-lxqt-4gb-armhf-2016-05-13-4gb.img) on SD card
+			o insert SD card then "sudo umount /dev/mmcblk0p*"
+			o "sudo dd if=/dev/zero of=/dev/mmcblk0 bs=1M"
+			o "sudo dd if=.img of=/dev/mmcblk0 bs=1M"
+		> Insert SD card in bbl without power
+		> Press boot_button and power-up it works
+	- We changed the the cmdline.txt to always force boot on SD card (##BeagleBone Green: eMMC disabled
+dtb=am335x-bonegreen-overlay.dtb)
+	- We tried with the chipsee screen :
+		> Not booting on the SD card or eMMC
+		> We need UART0 to communicate with bbl however the input rs232 is connected to UART1 on the bbl
+		> 

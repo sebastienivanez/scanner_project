@@ -1,0 +1,7 @@
+- Scanner code (communication between rpi and scanner)
+- Gui (buttons, redirection screens)
+- Make a GIT repository
+- Storage on a USB
+- Mail code
+	Store the email addresses
+- Converts scan doc to PDF
