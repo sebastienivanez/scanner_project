@@ -15,6 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    sendmail.h \
+    copyfile.h \
+    scanner.h \
+    logger.h
 
 FORMS    += mainwindow.ui
+
+QMAKE_CXXFLAGS += "-lsane"
