@@ -1,11 +1,15 @@
-#include "scanner.h"
+#ifndef SCANNER_H
+#define SCANNER_H
+
 #include "logger.h"
-//#include <Image.h>
 #include <stdint.h>
 #include <assert.h>
+#include <sane/sane.h>
+
 #ifndef PATH_MAX
 #define PATH_MAX 1024
 #endif
+
 typedef struct
 {
   uint8_t *data;
@@ -13,8 +17,7 @@ typedef struct
   int height;
   int x;
   int y;
-}
-Image;
+}Image;
 
 #define STRIP_HEIGHT	256
 static SANE_Handle device = NULL;
@@ -29,70 +32,71 @@ SANE_Status do_scan(const char *fileName);
 static void write_pnm_header (SANE_Frame format, int width, int height, int depth, FILE *ofp);
 static SANE_Status scan_it (FILE *ofp);
 static SANE_Status scan_it (FILE *ofp);
+
 int scanner(char *loc)
 {
-	SANE_Device scanner;
-	SANE_Option_Descriptor options;
-	SANE_Int version_code;
-	SANE_Status start;
-	SANE_Bool local_only=SANE_TRUE;
-	const SANE_Device **device_list=NULL,*runner;
-	SANE_Handle handler;
-	//device_list = (SANE_Device *)malloc(sizeof(SANE_Device));
-	//SANE_String_Const c = *device_list.name;
-	//device_list.name = "aap";
-	//printf("name = %s\n",*device_list(name));
+    SANE_Device scanner;
+    SANE_Option_Descriptor options;
+    SANE_Int version_code;
+    SANE_Status start;
+    SANE_Bool local_only=SANE_TRUE;
+    const SANE_Device **device_list=NULL,*runner;
+    SANE_Handle handler;
+    //device_list = (SANE_Device *)malloc(sizeof(SANE_Device));
+    //SANE_String_Const c = *device_list.name;
+    //device_list.name = "aap";
+    //printf("name = %s\n",*device_list(name));
 //	device_list = malloc(sizeof(SANE_Device));
 //	device_listImage = NULL;
-	start = sane_init (&version_code,NULL);
-	if (start>0) { 
-		printf("Initialisation failed with error: %s\n",sane_strstatus(start));
-	} else {
-			start = get_device(&device_list,local_only);
-		if (start<0) {
-		}
-		else
-		{
-			if (device_list == NULL) {
-				printf("No devices connected\n");
-			} else {
-				runner = *device_list;
-				printf("printer name: %s\n",runner->name);
-				/*for (runner; runner!=NULL;runner++)
-				{
-					printf("printer name: %s\n",runner->name);
-				}*/
-				start = sane_open(runner->name, &handler);
-				
-				if(start>0)
-				{
-					printf("Failed to open device, %s with error: '%s'",runner->name, sane_strstatus(start));
-				} else {
-					start = start_scan(handler,loc);
-					sane_close(handler);
-				}
-			}
-			
-		}
-	}			
-	
+    start = sane_init (&version_code,NULL);
+    if (start>0) {
+        printf("Initialisation failed with error: %s\n",sane_strstatus(start));
+    } else {
+            start = get_device(&device_list,local_only);
+        if (start<0) {
+        }
+        else
+        {
+            if (device_list == NULL) {
+                printf("No devices connected\n");
+            } else {
+                runner = *device_list;
+                printf("printer name: %s\n",runner->name);
+                /*for (runner; runner!=NULL;runner++)
+                {
+                    printf("printer name: %s\n",runner->name);
+                }*/
+                start = sane_open(runner->name, &handler);
+
+                if(start>0)
+                {
+                    printf("Failed to open device, %s with error: '%s'",runner->name, sane_strstatus(start));
+                } else {
+                    start = start_scan(handler,loc);
+                    sane_close(handler);
+                }
+            }
+
+        }
+    }
+
 //	free(device_list);
-	printf("sane status = %d ",start);
-	sane_exit();
-	return 0;
+    printf("sane status = %d ",start);
+    sane_exit();
+    return 0;
 }
 
 SANE_Status get_device(const SANE_Device *** device_list,SANE_Bool local_only)
 {
-	SANE_Status start = (SANE_Status) 0;
-	start = sane_get_devices(device_list, local_only);
-	if (start >0)
-	{
-		printf("Error getting Device List: %s\n",sane_strstatus(start));
-		return start;
-	}
-	return start;	
-	
+    SANE_Status start = (SANE_Status) 0;
+    start = sane_get_devices(device_list, local_only);
+    if (start >0)
+    {
+        printf("Error getting Device List: %s\n",sane_strstatus(start));
+        return start;
+    }
+    return start;
+
 }
 SANE_Status start_scan(SANE_Handle sane_handle, SANE_String_Const fileName)
 {
@@ -108,25 +112,25 @@ SANE_Status start_scan(SANE_Handle sane_handle, SANE_String_Const fileName)
 
 SANE_Status do_scan(const char *fileName)
 {
-	SANE_Status status;
-	FILE *ofp = NULL;
-	char path[PATH_MAX];
-	char part_path[PATH_MAX];
-	buffer_size = (32 * 1024);
-    	buffer = (SANE_Byte *) malloc (buffer_size);
+    SANE_Status status;
+    FILE *ofp = NULL;
+    char path[PATH_MAX];
+    char part_path[PATH_MAX];
+    buffer_size = (32 * 1024);
+        buffer = (SANE_Byte *) malloc (buffer_size);
 
-	do
-	{
+    do
+    {
         int dwProcessID = getpid();
         sprintf (path, "%s%d.pnm", fileName, dwProcessID);
         strcpy (part_path, path);
         strcat (part_path, ".part");
 
-		status = sane_start (device);
-		if (status != SANE_STATUS_GOOD)
-		{
-			break;
-		}
+        status = sane_start (device);
+        if (status != SANE_STATUS_GOOD)
+        {
+            break;
+        }
 
         if (NULL == (ofp = fopen (part_path, "w")))
         {
@@ -134,12 +138,12 @@ SANE_Status do_scan(const char *fileName)
             break;
         }
 
-		status = scan_it (ofp);
+        status = scan_it (ofp);
 
-		switch (status)
-		{
-			case SANE_STATUS_GOOD:
-			case SANE_STATUS_EOF:
+        switch (status)
+        {
+            case SANE_STATUS_GOOD:
+            case SANE_STATUS_EOF:
                  {
                       status = SANE_STATUS_GOOD;
                       if (!ofp || 0 != fclose(ofp))
@@ -157,11 +161,11 @@ SANE_Status do_scan(const char *fileName)
                           }
                       }
                   }
-				  break;
-			default:
                   break;
-		}
-	}while (0);
+            default:
+                  break;
+        }
+    }while (0);
 
     if (SANE_STATUS_GOOD != status)
     {
@@ -330,7 +334,7 @@ static SANE_Status scan_it (FILE *ofp)
             }
             else			/* ! must_buffer */
             {
-                if ((parm.depth != 16)) 
+                if ((parm.depth != 16))
                     fwrite (buffer, 1, len, ofp);
                 else
                 {
@@ -426,3 +430,5 @@ static void write_pnm_header (SANE_Frame format, int width, int height, int dept
             break;
     }
 }
+
+#endif // SCANNER_H
