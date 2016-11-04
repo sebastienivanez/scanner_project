@@ -1,5 +1,5 @@
 #include "logger.h"
-
+#include "scanner.h"
 int main(int argc, char *argv[])
 {
 	char* path = "/home/rcannaerts/graduation_project/log.txt";
@@ -8,5 +8,6 @@ int main(int argc, char *argv[])
 	{
 		int ret = logging(text[i],path);
 	} 	
+	scanner(path);
 	return 0;
 }
