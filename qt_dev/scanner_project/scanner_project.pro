@@ -13,14 +13,16 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    copyfile.cpp \
+    logger.cpp \
+    scanner.cpp
 
 HEADERS  += mainwindow.h \
-    sendmail.h \
     copyfile.h \
     scanner.h \
     logger.h
 
 FORMS    += mainwindow.ui
 
-QMAKE_CXXFLAGS += "-lsane"
+LIBS = -lsane

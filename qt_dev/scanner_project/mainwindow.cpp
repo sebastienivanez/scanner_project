@@ -7,9 +7,10 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    my_window = new QWidget(this);
+    main_window = new QWidget(this);
+    //main_window->setStyleSheet("QWidget {background: grey}");
 
-    // Create the button
+    // Create the buttons
     button_scan = new QPushButton("SCAN", this);
     button_usb = new QPushButton("USB", this);
     button_mail =  new QPushButton("MAIL", this);
@@ -19,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     button_usb->setFont(QFont("Comic Sans MS", 20));
     button_mail->setFont(QFont("Comic Sans MS", 20));
 
-    // Connect
+    // Connect buttons
     QObject::connect(button_scan, SIGNAL(clicked()),this, SLOT(scanHandler()));
     QObject::connect(button_usb, SIGNAL(clicked()),this, SLOT(usbHandler()));
     QObject::connect(button_mail, SIGNAL(clicked()),this, SLOT(mailHandler()));
@@ -29,48 +30,58 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     layout->addWidget(button_usb, 1);
     layout->addWidget(button_mail, 1);
 
-    my_window->setLayout(layout);
-    this->setCentralWidget(my_window);
+    main_window->setLayout(layout);
+    this->setCentralWidget(main_window);
 }
 
 void MainWindow::scanHandler()
 {
-    char* path = "/home/sivanez/test/log.txt";
+    /*char* path = "/home/sivanez/test/log.txt";
     char text[6][1024]={{"penguin"},{"duck"},{"donkey"},{"llama"},{"monkey"},{"duck"}};
     for (int i = 0; i<6; i++)
     {
-        int ret = logging(text[i],path);
+        logging(text[i],path);
     }
     scanner(path);
+
+    mail_window = new QWidget(this);
+*/
+
 }
 
 void MainWindow::usbHandler()
 {
     copyFile("/home/sivanez/graduate_program/project/scanner_project/datasheet_ttl_rs232.pdf", "/home/sivanez/graduate_program/project/scanner_project/copy.pdf");
-
-    /*QWidget fenetre;
-
-    QLineEdit *nom = new QLineEdit;
-    QLineEdit *prenom = new QLineEdit;
-    QLineEdit *age = new QLineEdit;
-
-    QFormLayout *layout = new QFormLayout;
-    layout->addRow("Votre nom", nom);
-    layout->addRow("Votre prénom", prenom);
-    layout->addRow("Votre âge", age);
-
-    fenetre.setLayout(layout);
-    fenetre.show();*/
 }
 
 void MainWindow::mailHandler()
 {
-    string email = "sebastien@ivanez.com";
-    string msg_body = "Hello from Qt";
-    string msg_subject = "Try2";
-    string msg_attachement = "/home/sivanez/graduate_program/project/datasheet_ttl_rs232.pdf";
+    // Create the button
+    QPushButton *send_mail = new QPushButton("Send");
+    send_mail->setFont(QFont("Comic Sans MS", 20));
 
-    sendMail(email, msg_subject, msg_body, msg_attachement);
+    // Variables to store the email infos
+    email = new QLineEdit;
+    msg_subject = new QLineEdit;
+    msg_body = new QLineEdit;
+
+    // Update the mainwindow
+    mail_window = new QWidget(this);
+    QFormLayout *mail_layout = new QFormLayout;
+    mail_layout->addRow("Email", email);
+    mail_layout->addRow("Subject", msg_subject);
+    mail_layout->addRow("Body", msg_body);
+    mail_layout->addWidget(send_mail);
+    mail_window->setLayout(mail_layout);
+    this->setCentralWidget(mail_window);
+
+    // Connect button
+    QObject::connect(send_mail, SIGNAL(clicked()),this, SLOT(sendHandler()));
+}
+
+void MainWindow::sendHandler()
+{
+    system(qPrintable("echo \"" + msg_body->text() + "\" | mailx -s \"" + msg_subject->text() + "\" -a " + msg_attachement + " " + email->text()));
 }
 
 MainWindow::~MainWindow()
