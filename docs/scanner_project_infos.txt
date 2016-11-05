@@ -5,3 +5,8 @@ serial pi plus
 raspberry pi
 RS232 DB9 connector of chipsee lcd is p2=TxD P3=RxD
 
+To send a mail with mailx:
+	sudo apt-get install sendmail
+	sudo apt-get install heirloom-mailx
+
+explanation of cross compiling: https://www.raspberrypi.org/forums/viewtopic.php?f=31&t=7493

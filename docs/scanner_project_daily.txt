@@ -24,4 +24,24 @@ dtb=am335x-bonegreen-overlay.dtb)
 	- We tried with the chipsee screen :
 		> Not booting on the SD card or eMMC
 		> We need UART0 to communicate with bbl however the input rs232 is connected to UART1 on the bbl
-		> 
+		> To communicate with bbl and chipsee we use ssh
+
+* 5_11 : 
+	- The chipsee touch screen doesn't work with bbl
+		> Latest Angstrom image works (add dtb= something in ?)
+		> some additionnal drivers must be installed (probably) but we didn't manage to find them
+	- Start using RPi with latest image raspbian
+	- Development of Qt application
+		> Download QT5
+		> Start a Widget project
+	- Communication with scanner HP deskjet 3660
+		> Use Sane library (sudo apt-get libsane-dev)
+		> Compile with g++ file.c -lsane
+	- Send email
+		> sudo apt-get install sendmail
+		> sudo apt-get install heirloom-mailx
+	- Copy PDF on USB key
+	- Transform format from PNM to PDF
+		> Download Magick++
+	- Cross compiling
+		>
