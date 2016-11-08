@@ -9,6 +9,8 @@
 #include <QFormLayout>
 #include <QLineEdit>
 #include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QGraphicsPixmapItem>
 
 namespace Ui {
 class MainWindow;

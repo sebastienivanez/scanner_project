@@ -49,9 +49,15 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../scanner_project/main.cpp \
-		../scanner_project/mainwindow.cpp moc_mainwindow.cpp
+		../scanner_project/mainwindow.cpp \
+		../scanner_project/copyfile.cpp \
+		../scanner_project/logger.cpp \
+		../scanner_project/scanner.cpp moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		copyfile.o \
+		logger.o \
+		scanner.o \
 		moc_mainwindow.o
 DIST          = /home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/common/unix.conf \
@@ -184,6 +190,7 @@ DIST          = /home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/qt_config.prf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_post.prf \
+		../scanner_project/.qmake.stash \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/default_pre.prf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/resolve_config.prf \
@@ -201,8 +208,14 @@ DIST          = /home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/exceptions.prf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/yacc.prf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/lex.prf \
-		../scanner_project/scanner_project.pro ../scanner_project/mainwindow.h ../scanner_project/main.cpp \
-		../scanner_project/mainwindow.cpp
+		../scanner_project/scanner_project.pro ../scanner_project/mainwindow.h \
+		../scanner_project/copyfile.h \
+		../scanner_project/scanner.h \
+		../scanner_project/logger.h ../scanner_project/main.cpp \
+		../scanner_project/mainwindow.cpp \
+		../scanner_project/copyfile.cpp \
+		../scanner_project/logger.cpp \
+		../scanner_project/scanner.cpp
 QMAKE_TARGET  = scanner_project
 DESTDIR       = 
 TARGET        = scanner_project
@@ -345,6 +358,7 @@ Makefile: ../scanner_project/scanner_project.pro /home/sivanez/Qt5.7.0/5.7/gcc_6
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/qt_config.prf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/default_pre.prf \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/resolve_config.prf \
@@ -498,6 +512,7 @@ Makefile: ../scanner_project/scanner_project.pro /home/sivanez/Qt5.7.0/5.7/gcc_6
 /home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/qt_config.prf:
 /home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++/qmake.conf:
 /home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/exclusive_builds.prf:
 /home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/default_pre.prf:
 /home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/features/resolve_config.prf:
@@ -533,8 +548,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../scanner_project/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../scanner_project/main.cpp ../scanner_project/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../scanner_project/mainwindow.h ../scanner_project/copyfile.h ../scanner_project/scanner.h ../scanner_project/logger.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../scanner_project/main.cpp ../scanner_project/mainwindow.cpp ../scanner_project/copyfile.cpp ../scanner_project/logger.cpp ../scanner_project/scanner.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../scanner_project/mainwindow.ui $(DISTDIR)/
 
 
@@ -667,6 +682,33 @@ moc_mainwindow.cpp: /home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMainWind
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QPushButton \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qpushbutton.h \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMessageBox \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qdialog.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QHBoxLayout \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qboxlayout.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlayout.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgridlayout.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QLineEdit \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlineedit.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qframe.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qtextcursor.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qtextformat.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qpen.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qtextoption.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QFormLayout \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qformlayout.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QLayout \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsScene \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgraphicsscene.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsView \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgraphicsview.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qpainter.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qscrollarea.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsPixmapItem \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgraphicsitem.h \
 		../scanner_project/mainwindow.h \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/bin/moc
 	/home/sivanez/Qt5.7.0/5.7/gcc_64/bin/moc $(DEFINES) -I/home/sivanez/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++ -I/home/sivanez/graduate_program/project/scanner_project/qt_dev/scanner_project -I/home/sivanez/Qt5.7.0/5.7/gcc_64/include -I/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets -I/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui -I/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../scanner_project/mainwindow.h -o moc_mainwindow.cpp
@@ -794,13 +836,42 @@ main.o: ../scanner_project/main.cpp ../scanner_project/mainwindow.h \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QPushButton \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qpushbutton.h \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMessageBox \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qdialog.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QHBoxLayout \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qboxlayout.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlayout.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgridlayout.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QLineEdit \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlineedit.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qframe.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qtextcursor.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qtextformat.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qpen.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qtextoption.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QFormLayout \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qformlayout.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QLayout \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsScene \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgraphicsscene.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsView \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgraphicsview.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qpainter.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qscrollarea.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsPixmapItem \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgraphicsitem.h \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QApplication \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qapplication.h \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtCore/qcoreapplication.h \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtCore/qeventloop.h \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qdesktopwidget.h \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qguiapplication.h \
-		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qinputmethod.h
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qinputmethod.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QStyle \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qstyle.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../scanner_project/main.cpp
 
 mainwindow.o: ../scanner_project/mainwindow.cpp ../scanner_project/mainwindow.h \
@@ -907,8 +978,90 @@ mainwindow.o: ../scanner_project/mainwindow.cpp ../scanner_project/mainwindow.h 
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QPushButton \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qpushbutton.h \
 		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractbutton.h \
-		ui_mainwindow.h
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMessageBox \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qmessagebox.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qdialog.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QHBoxLayout \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qboxlayout.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlayout.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgridlayout.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QLineEdit \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlineedit.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qframe.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qtextcursor.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qtextformat.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qpen.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qtextoption.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QFormLayout \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qformlayout.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QLayout \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsScene \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgraphicsscene.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsView \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgraphicsview.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qpainter.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qscrollarea.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QGraphicsPixmapItem \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgraphicsitem.h \
+		ui_mainwindow.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtCore/QVariant \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QAction \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qaction.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qactiongroup.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QApplication \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qapplication.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtCore/qcoreapplication.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtCore/qeventloop.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qguiapplication.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qinputmethod.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QButtonGroup \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QHeaderView \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qheaderview.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qstyleoption.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qvalidator.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtCore/qregularexpression.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qslider.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractslider.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qstyle.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qtabbar.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qrubberband.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMenuBar \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qmenubar.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qmenu.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QStatusBar \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qstatusbar.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QToolBar \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/qtoolbar.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtWidgets/QWidget \
+		../scanner_project/copyfile.h \
+		../scanner_project/sendmail.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtCore/QString \
+		../scanner_project/scanner.h \
+		../scanner_project/logger.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/QDesktopServices \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtGui/qdesktopservices.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtCore/qstandardpaths.h \
+		/home/sivanez/Qt5.7.0/5.7/gcc_64/include/QtCore/QUrl
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../scanner_project/mainwindow.cpp
+
+copyfile.o: ../scanner_project/copyfile.cpp ../scanner_project/copyfile.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o copyfile.o ../scanner_project/copyfile.cpp
+
+logger.o: ../scanner_project/logger.cpp ../scanner_project/logger.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o logger.o ../scanner_project/logger.cpp
+
+scanner.o: ../scanner_project/scanner.cpp ../scanner_project/scanner.h \
+		../scanner_project/logger.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scanner.o ../scanner_project/scanner.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
