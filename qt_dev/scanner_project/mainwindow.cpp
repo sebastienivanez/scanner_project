@@ -9,6 +9,7 @@
 
 #define LOG_PATH (char*)"log.txt"
 #define PDF_PATH (char*)"aap.pdf"
+#define OPEN_PDF_PATH (char*)"file:///home/sivanez/graduate_program/project/scanner_project/qt_dev/build-scanner_project-Desktop_Qt_5_7_0_GCC_64bit-Debug/aap.pdf"
 #define PNM_PATH (char*)"aap.pnm"
 #define USB_PATH (char*)"copy.pdf"
 
@@ -55,7 +56,7 @@ void MainWindow::scanHandler()
     scanner(PNM_PATH, arg);
     create_pdf(PNM_PATH, PDF_PATH);
 
-    QDesktopServices::openUrl(QUrl("file:///home/sivanez/graduate_program/project/scanner_project/qt_dev/build-scanner_project-Desktop_Qt_5_7_0_GCC_64bit-Debug/aap.pdf"));
+    QDesktopServices::openUrl(QUrl(OPEN_PDF_PATH));
 }
 
 void MainWindow::usbHandler()
@@ -96,19 +97,20 @@ void MainWindow::mailHandler()
     mail_layout->addRow("Body", msg_body);
     mail_layout->addWidget(send_mail);
     mail_window->setLayout(mail_layout);
+
     this->setCentralWidget(mail_window);
 
     // Connect button
-    QObject::connect(send_mail, SIGNAL(clicked()),this, SLOT(sendHandler()));
+    QObject::connect(send_mail, SIGNAL(clicked()), this, SLOT(sendHandler()));
 }
 
 void MainWindow::sendHandler()
 {
-    int ret;
+    int ret = -1;
     QString ret_mail;
 
     // System call to send an email using mailx library
-    ret = system(qPrintable("echo \"" + msg_body->text() + "\" | mailx -s \"" + msg_subject->text() + "\" -a " + msg_attachement + " " + email->text()));
+    //ret = system(qPrintable("echo \"" + msg_body->text() + "\" | mailx -s \"" + msg_subject->text() + "\" -a " + msg_attachement + " " + email->text()));
 
     if (ret < 0 ) {
         ret_mail = "FAILED";
