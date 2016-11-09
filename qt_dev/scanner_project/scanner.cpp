@@ -41,15 +41,41 @@ int create_pdf(char *src, char *dest)
         return 0;
     }
     if(pid1==0){
-        int ret  =  execl("/usr/bin/convert","convert","-adjoin", src, dest, NULL);
+        int ret  =  execl("/usr/local/bin/convert","convert","-adjoin", src, dest, NULL);
+	if (ret<0)
+	{
+		printf("error creating pdf\n");
+	}
+    return 0;
+    }
+    return 0;
+}
+
+int delete_pnm(char* src)
+{
+	pid_t pid1, pid;
+    int status;
+    pid1=fork();
+    if (pid1!=0) {
+        pid = wait(&status);
+        return 0;
+    }
+    if(pid1==0){
+	int ret = execl("/bin/rm","rm",src,NULL);
+        if (ret<0)
+        {
+                printf("error creating pdf\n");
+        }
+        //ret = execl("/bin/rm","rm",src,NULL);
         if (ret < 0) {
-            printf("verdomme\n");
+            printf("error deleting\n");
             return ret;
         }
     return 0;
     }
     return 0;
 }
+
 
 void arguments (char *test[10])
 {

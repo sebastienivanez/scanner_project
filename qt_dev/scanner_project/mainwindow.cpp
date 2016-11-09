@@ -8,10 +8,10 @@
 #include <QUrl>
 
 #define LOG_PATH (char*)"log.txt"
-#define PDF_PATH (char*)"aap.pdf"
-#define OPEN_PDF_PATH (char*)"file:///home/sivanez/graduate_program/project/scanner_project/qt_dev/build-scanner_project-Desktop_Qt_5_7_0_GCC_64bit-Debug/aap.pdf"
-#define PNM_PATH (char*)"aap.pnm"
-#define USB_PATH (char*)"copy.pdf"
+#define PDF_PATH (char*)"file.pdf"
+#define OPEN_PDF_PATH (char*)"file://file.pdf"
+#define PNM_PATH (char*)"file.pnm"
+#define USB_PATH (char*)"/media/pi/raf/copy.pdf"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     button_scan = new QPushButton("SCAN", this);
     button_usb = new QPushButton("USB", this);
     button_mail =  new QPushButton("MAIL", this);
+    button_quit =  new QPushButton("QUIT", this);
 
     // Set font of the button
     button_scan->setFont(QFont("Comic Sans MS", 20));
@@ -33,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QObject::connect(button_scan, SIGNAL(clicked()),this, SLOT(scanHandler()));
     QObject::connect(button_usb, SIGNAL(clicked()),this, SLOT(usbHandler()));
     QObject::connect(button_mail, SIGNAL(clicked()),this, SLOT(mailHandler()));
+    QObject::connect(button_quit, SIGNAL(clicked()),this, SLOT(quitHandler()));
 
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addWidget(button_scan, 1);
@@ -55,6 +57,7 @@ void MainWindow::scanHandler()
 
     scanner(PNM_PATH, arg);
     create_pdf(PNM_PATH, PDF_PATH);
+    delete_pnm(PNM_PATH);
 
     QDesktopServices::openUrl(QUrl(OPEN_PDF_PATH));
 }
@@ -75,7 +78,7 @@ void MainWindow::usbHandler()
 
     QMessageBox usb_box;
     usb_box.setText(ret_copy);
-    usb_box.exec();
+    usb_box.exec(); 
 }
 
 void MainWindow::mailHandler()
@@ -106,11 +109,12 @@ void MainWindow::mailHandler()
 
 void MainWindow::sendHandler()
 {
-    int ret = -1;
+    int ret;
     QString ret_mail;
+    msg_attachement = PDF_PATH;
 
     // System call to send an email using mailx library
-    //ret = system(qPrintable("echo \"" + msg_body->text() + "\" | mailx -s \"" + msg_subject->text() + "\" -a " + msg_attachement + " " + email->text()));
+    ret = system(qPrintable("echo \"" + msg_body->text() + "\" | mailx -s \"" + msg_subject->text() + "\" -a " + msg_attachement + " " + email->text()));
 
     if (ret < 0 ) {
         ret_mail = "FAILED";
@@ -121,6 +125,11 @@ void MainWindow::sendHandler()
     QMessageBox mail_box;
     mail_box.setText(ret_mail);
     mail_box.exec();
+}
+
+void MainWindow::quitHandler()
+{
+    this->close();
 }
 
 MainWindow::~MainWindow()
