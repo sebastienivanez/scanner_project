@@ -1,7 +1,7 @@
 #include <copyfile.h>
 using namespace std;
 
-void copyFile(const char* input, const char* output)
+int copyFile(const char* input, const char* output)
 {
     // Open input file
     ifstream input_file(input, ios::binary);
@@ -9,7 +9,7 @@ void copyFile(const char* input, const char* output)
     // Error handling
     if (input_file.fail()) {
         cout << "The file couldn't be opened" << endl;
-        exit(0);
+        return -1;
     }
 
     // Open output file
@@ -25,4 +25,6 @@ void copyFile(const char* input, const char* output)
     // Closing input and output
     input_file.close();
     output_file.close();
+
+    return 0;
 }

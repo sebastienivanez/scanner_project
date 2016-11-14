@@ -3,6 +3,15 @@
 #include "copyfile.h"
 #include "sendmail.h"
 #include "scanner.h"
+#include "logger.h"
+#include <QDesktopServices>
+#include <QUrl>
+
+#define LOG_PATH (char*)"log.txt"
+#define PDF_PATH (char*)"aap.pdf"
+#define OPEN_PDF_PATH (char*)"file:///home/sivanez/graduate_program/project/scanner_project/qt_dev/build-scanner_project-Desktop_Qt_5_7_0_GCC_64bit-Debug/aap.pdf"
+#define PNM_PATH (char*)"aap.pnm"
+#define USB_PATH (char*)"copy.pdf"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -36,22 +45,37 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 void MainWindow::scanHandler()
 {
-    /*char* path = "/home/sivanez/test/log.txt";
     char text[6][1024]={{"penguin"},{"duck"},{"donkey"},{"llama"},{"monkey"},{"duck"}};
-    for (int i = 0; i<6; i++)
-    {
-        logging(text[i],path);
+    for (int i = 0; i<6; i++) {
+        logging(text[i], LOG_PATH);
     }
-    scanner(path);
 
-    mail_window = new QWidget(this);
-*/
+    char *arg[10];
+    arguments (arg);
 
+    scanner(PNM_PATH, arg);
+    create_pdf(PNM_PATH, PDF_PATH);
+
+    QDesktopServices::openUrl(QUrl(OPEN_PDF_PATH));
 }
 
 void MainWindow::usbHandler()
 {
-    copyFile("/home/sivanez/graduate_program/project/scanner_project/datasheet_ttl_rs232.pdf", "/home/sivanez/graduate_program/project/scanner_project/copy.pdf");
+    int ret;
+    QString ret_copy;
+
+    // Copies PDF file on the USB key
+    ret = copyFile(PDF_PATH, USB_PATH);
+
+    if (ret < 0 ) {
+        ret_copy = "FAILED";
+    } else {
+        ret_copy = "DONE";
+    }
+
+    QMessageBox usb_box;
+    usb_box.setText(ret_copy);
+    usb_box.exec();
 }
 
 void MainWindow::mailHandler()
@@ -73,15 +97,30 @@ void MainWindow::mailHandler()
     mail_layout->addRow("Body", msg_body);
     mail_layout->addWidget(send_mail);
     mail_window->setLayout(mail_layout);
+
     this->setCentralWidget(mail_window);
 
     // Connect button
-    QObject::connect(send_mail, SIGNAL(clicked()),this, SLOT(sendHandler()));
+    QObject::connect(send_mail, SIGNAL(clicked()), this, SLOT(sendHandler()));
 }
 
 void MainWindow::sendHandler()
 {
-    system(qPrintable("echo \"" + msg_body->text() + "\" | mailx -s \"" + msg_subject->text() + "\" -a " + msg_attachement + " " + email->text()));
+    int ret = -1;
+    QString ret_mail;
+
+    // System call to send an email using mailx library
+    //ret = system(qPrintable("echo \"" + msg_body->text() + "\" | mailx -s \"" + msg_subject->text() + "\" -a " + msg_attachement + " " + email->text()));
+
+    if (ret < 0 ) {
+        ret_mail = "FAILED";
+    } else {
+        ret_mail = "DONE";
+    }
+
+    QMessageBox mail_box;
+    mail_box.setText(ret_mail);
+    mail_box.exec();
 }
 
 MainWindow::~MainWindow()
